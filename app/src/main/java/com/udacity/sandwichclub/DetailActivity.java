@@ -3,7 +3,9 @@ package com.udacity.sandwichclub;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
@@ -14,13 +16,25 @@ public class DetailActivity extends AppCompatActivity {
 
     public static final String EXTRA_POSITION = "extra_position";
     private static final int DEFAULT_POSITION = -1;
+    private TextView originTv;
+    private TextView alsoKnownAsTv;
+    private TextView IngredientsTv;
+    private TextView DescriptionTv;
+    private ImageView ingredientsIv;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        ImageView ingredientsIv = findViewById(R.id.image_iv);
+        //get the references
+        ingredientsIv = findViewById(R.id.image_iv);
+        originTv= findViewById(R.id.origin_tv);
+        alsoKnownAsTv= findViewById(R.id.also_known_tv);
+        IngredientsTv= findViewById(R.id.ingredients_tv);
+        DescriptionTv= findViewById(R.id.description_tv);
+
 
         Intent intent = getIntent();
         if (intent == null) {
@@ -43,7 +57,7 @@ public class DetailActivity extends AppCompatActivity {
             return;
         }
 
-        populateUI();
+        populateUI(sandwich);
         Picasso.with(this)
                 .load(sandwich.getImage())
                 .into(ingredientsIv);
@@ -56,7 +70,16 @@ public class DetailActivity extends AppCompatActivity {
         Toast.makeText(this, R.string.detail_error_message, Toast.LENGTH_SHORT).show();
     }
 
-    private void populateUI() {
+    private void populateUI(Sandwich sandwich) {
+
+     originTv.setText(sandwich.getPlaceOfOrigin());
+        // Convert the ArrayList into a String.and set the text
+        String res = TextUtils.join(",", sandwich.getAlsoKnownAs());
+        alsoKnownAsTv.setText(res);
+        String ingredientsString=TextUtils.join(",",sandwich.getIngredients());
+        IngredientsTv.setText(ingredientsString);
+        DescriptionTv.setText(sandwich.getDescription());
 
     }
 }
+
